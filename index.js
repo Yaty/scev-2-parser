@@ -13,6 +13,9 @@ app.get('/', (req, res) => {
     socketIoUrl: ':8080',
     backgroundColor: req.query.backgroundColor || 'black',
     fontColor: req.query.fontColor || 'red',
+    font: req.query.font || 'FreeMono',
+    fontSize: req.query.fontSize || '70vh',
+    fontWeight: req.query.fontWeight || 'bold',
   }));
 });
 
