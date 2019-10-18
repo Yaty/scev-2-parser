@@ -52,16 +52,6 @@ parser.on('data', (data) => {
   });
 });
 
-const sockets = [];
-
-io.sockets.on('connection', function(socket) {
-  sockets.push(socket);
-
-  socket.once('close', function () {
-    sockets.splice(sockets.indexOf(socket), 1);
-  });
-});
-
 function exit(...params) {
   if (params.length > 0) {
     console.log(...params);
