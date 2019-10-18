@@ -1,0 +1,34 @@
+doctype html
+html(lang='en')
+    head
+        title SCEV-2 Display
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js')
+        style(type='text/css').
+            html {
+                background-color: #{backgroundColor};
+            }
+
+            #counter {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+                font: 70vh 'FreeMono';
+                font-weight: bold;
+                color: #{fontColor};
+            }
+    body
+        div(id='counter')
+            span(id='minutes') 00
+            span :
+            span(id='seconds') 00
+        script.
+            const socket = io.connect('#{socketIoUrl}');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+
+            socket.on('time', function (data) {
+                minutesEl.innerText = data.minutes;
+                secondsEl.innerText = data.seconds;
+            });
