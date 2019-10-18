@@ -22,6 +22,12 @@ If it's a Neutrik NL4 MP connector :
 - 1- to B
 - 2- not connected
 
+You can ask Deepron the documentation if you want more information.
+
 ### Start
 
 `sudo node .`
+
+## Disclaimer
+
+I'm not responsible for any damages to you or to your devices.
