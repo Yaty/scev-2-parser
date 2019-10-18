@@ -67,23 +67,11 @@ function exit(...params) {
     console.log(...params);
   }
 
-  server.close(() => {
-    console.log('HTTP server closed');
-
-    io.close(() => {
-      for (const socket of sockets) {
-        socket.close();
-      }
-
-      console.log('Socket.io closed');
-
-      port.close(() => {
-        console.log('Serial port closed');
-        console.log('Cleaned');
-        process.exit(0);
-      });
-    });
-  });
+  server.close();
+  io.close();
+  port.close();
+  console.log('Cleaned');
+  process.exit(0);
 }
 
 process.on('SIGINT', exit);
