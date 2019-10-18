@@ -10,7 +10,7 @@ const index = pug.compileFile('index.pug');
 
 app.get('/', (req, res) => {
   res.send(index({
-    socketIoUrl: 'http://localhost:8080',
+    socketIoUrl: ':8080',
     backgroundColor: req.query.backgroundColor || 'black',
     fontColor: req.query.fontColor || 'red',
   }));
