@@ -1,16 +1,19 @@
 const app = require('express')();
 const cors = require('cors');
-const io = require('socket.io')(8080);
+const io = require('socket.io').listen(8080);
 const SerialPort = require('serialport');
+const pug = require('pug');
 
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
+const index = pug.compileFile('index.pug');
 
-app.get('/saxmono.ttf', (req, res) => {
-  res.sendFile(__dirname + '/saxmono.ttf');
+app.get('/', (req, res) => {
+  res.send(index({
+    socketIoUrl: 'http://localhost:8080',
+    backgroundColor: req.query.backgroundColor || 'black',
+    fontColor: req.query.fontColor || 'red',
+  }));
 });
 
 const server = app.listen(80, () => console.log('HTTP server is running on http://localhost'));
@@ -46,15 +49,28 @@ parser.on('data', (data) => {
   });
 });
 
-function exit() {
-  server.close();
-  io.close();
-  port.close();
-  console.log('Cleaned');
-  process.exit(0);
+function exit(...params) {
+  if (params.length > 0) {
+    console.log(...params);
+  }
+
+  server.close(() => {
+    console.log('HTTP server closed');
+
+    io.close(() => {
+      console.log('Socket.io closed');
+
+      port.close(() => {
+        console.log('Serial port closed');
+        console.log('Cleaned');
+        process.exit(0);
+      });
+    });
+  });
 }
 
 process.on('SIGINT', exit);
 process.on('SIGUSR1', exit);
 process.on('SIGUSR2', exit);
 process.on('uncaughtException', exit);
+process.on('unhandledRejection', exit);
