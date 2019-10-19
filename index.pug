@@ -18,17 +18,31 @@ html(lang='en')
                 font-weight: #{fontWeight};
                 color: #{fontColor};
             }
+
+            @keyframes blinker {
+                50% {
+                    opacity: 0;
+                }
+            }
     body
         div(id='counter')
             span(id='minutes') 00
-            span :
+            span(id='separator') :
             span(id='seconds') 00
         script.
             const socket = io.connect('#{socketIoUrl}');
+            const counterEl = document.getElementById('counter');
             const minutesEl = document.getElementById('minutes');
             const secondsEl = document.getElementById('seconds');
 
             socket.on('time', function (data) {
                 minutesEl.innerText = data.minutes;
                 secondsEl.innerText = data.seconds;
+                const seconds = Number(data.seconds);
+
+                if (seconds <= 5) {
+                  counterEl.style.animation = 'blinker 0.75s step-start infinite';
+                } else {
+                  counterEl.style.animation = '';
+                }
             });
